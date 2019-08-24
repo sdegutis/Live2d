@@ -1,0 +1,52 @@
+{
+	"name": "helloworld",
+	"displayName": "HelloWorld",
+	"publisher": "me",
+	"description": "",
+	"version": "0.0.6",
+	"engines": {
+		"vscode": "^1.31.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"workspaceContains:main.lua",
+		"onLanguage:lua"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.helloWorld",
+				"title": "Hello World"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "extension.helloWorld",
+				"key": "Alt+R",
+				"mac": "cmd+R"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.6",
+		"@types/node": "^10.12.21",
+		"@types/vscode": "^1.31.0",
+		"glob": "^7.1.4",
+		"mocha": "^6.1.4",
+		"typescript": "^3.3.1",
+		"tslint": "^5.12.1",
+		"vscode-test": "^1.0.2"
+	},
+	"dependencies": {
+		"vsce": "file:../../../../Program Files/nodejs/node_modules/vsce"
+	}
+}
