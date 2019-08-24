@@ -1,28 +1,38 @@
 import * as vscode from 'vscode';
 import { spawn, ChildProcess } from 'child_process';
+import { readFileSync } from 'fs';
+
+let proc: ChildProcess | null;
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Starting love2d thing');
 
 	vscode.window.showInformationMessage('Running Love2d...');
 	const rootDir = vscode.workspace.rootPath!;
-	let proc: ChildProcess;
 
 	function setupProc() {
 		proc = spawn('love', [rootDir]);
 		proc.unref();
-		proc.on('exit', setupProc);
+		proc.on('exit', () => {
+			proc = null;
+		});
 	}
 	setupProc();
 
 	vscode.workspace.onDidSaveTextDocument(doc => {
-		evalSelectionOrFile();
-		// console.log('got save');
+		if (!proc) return setupProc();
+		console.log('got save');
+		if (vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave')) {
+			evalSelectionOrFile();
+		}
 	});
 
 	function evalSelectionOrFile() {
+		if (!proc) return setupProc();
+
+		console.log('maybe evaling');
 		const editor = vscode.window.activeTextEditor;
-		if (editor) {
+		if (editor && editor.document.languageId === 'lua') {
 			let str = editor.document.getText();
 			if (!editor.selection.isEmpty) {
 				str = editor.document.getText(editor.selection);
@@ -31,13 +41,23 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}
 
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
+	let disposable = vscode.commands.registerCommand('degutis.live2d.eval', () => {
+		if (!proc) return setupProc();
+
 		evalSelectionOrFile();
+
+		vscode.workspace.findFiles('**/*.lua').then(values => {
+			values.forEach((value) => {
+				proc!.stdin.write(readFileSync(value.fsPath, 'utf-8') + '\0');
+			});
+		});
 	});
 
 	context.subscriptions.push(disposable);
 }
 
 export function deactivate() {
-
+	if (proc) {
+		process.kill(0);
+	}
 }

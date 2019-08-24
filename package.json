@@ -1,8 +1,8 @@
 {
-	"name": "helloworld",
-	"displayName": "HelloWorld",
-	"publisher": "me",
-	"description": "",
+	"name": "live2d",
+	"displayName": "Live2d",
+	"publisher": "degutis",
+	"description": "Live Love2d development environment",
 	"version": "0.0.6",
 	"engines": {
 		"vscode": "^1.31.0"
@@ -16,15 +16,27 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"configuration": [
+			{
+				"title": "Live2d",
+				"properties": {
+					"degutis.live2d.evalOnSave": {
+						"description": "Eval file or selection when file is saved",
+						"type": "boolean",
+						"default": true
+					}
+				}
+			}
+		],
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"command": "degutis.live2d.eval",
+				"title": "Eval selection or file"
 			}
 		],
 		"keybindings": [
 			{
-				"command": "extension.helloWorld",
+				"command": "degutis.live2d.eval",
 				"key": "Alt+R",
 				"mac": "cmd+R"
 			}
