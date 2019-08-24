@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { spawn, ChildProcess } from 'child_process';
-import { readFileSync } from 'fs';
+import * as fs from 'fs';
 
 let proc: ChildProcess | null;
 
@@ -20,15 +20,16 @@ export function activate(context: vscode.ExtensionContext) {
 	setupProc();
 
 	vscode.workspace.onDidSaveTextDocument(doc => {
-		if (!proc) return setupProc();
-		console.log('got save');
-		if (vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave')) {
-			evalSelectionOrFile();
-		}
+		// if (!proc) return;
+
+		// console.log('got save');
+		// if (vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave')) {
+		// 	evalSelectionOrFile();
+		// }
 	});
 
 	function evalSelectionOrFile() {
-		if (!proc) return setupProc();
+		if (!proc) return;
 
 		console.log('maybe evaling');
 		const editor = vscode.window.activeTextEditor;
@@ -41,23 +42,61 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}
 
-	let disposable = vscode.commands.registerCommand('degutis.live2d.eval', () => {
-		if (!proc) return setupProc();
+	context.subscriptions.push(vscode.commands.registerCommand(
+		'degutis.live2d.eval', () => {
+			if (!proc) return;
+			evalSelectionOrFile();
+		})
+	);
 
-		evalSelectionOrFile();
+	context.subscriptions.push(vscode.commands.registerCommand(
+		'degutis.live2d.evalAll', () => {
+			if (!proc) return;
 
-		vscode.workspace.findFiles('**/*.lua').then(values => {
-			values.forEach((value) => {
-				proc!.stdin.write(readFileSync(value.fsPath, 'utf-8') + '\0');
+			evalAllFilesInProject();
+		})
+	);
+
+	context.subscriptions.push(vscode.commands.registerCommand(
+		'degutis.live2d.evalAllOpen', () => {
+			// if (!proc) return;
+
+			// vscode.window.showInputBox({ prompt: 'testing' })
+			vscode.window.createTerminal('bla')
+
+			const chan = vscode.window.createOutputChannel('love2d output');
+			context.subscriptions.push(chan);
+			chan.show();
+			chan.appendLine('hey guys');
+			chan.appendLine('hows it going');
+
+			vscode.workspace.textDocuments.filter(doc => doc.languageId === 'lua').forEach(doc => {
+				console.log('found file', doc.fileName);
+			});
+
+			// evalAllFilesInProject();
+		})
+	);
+
+	context.subscriptions.push(vscode.commands.registerCommand(
+		'degutis.live2d.run', () => {
+			if (!proc) {
+				setupProc();
+			}
+		})
+	);
+
+	function evalAllFilesInProject() {
+		vscode.workspace.findFiles('**/*.lua').then(uris => {
+			uris.forEach((uri) => {
+				proc!.stdin.write(fs.readFileSync(uri.fsPath, 'utf-8') + '\0');
 			});
 		});
-	});
-
-	context.subscriptions.push(disposable);
+	}
 }
 
 export function deactivate() {
 	if (proc) {
-		process.kill(0);
+		proc.kill();
 	}
 }
