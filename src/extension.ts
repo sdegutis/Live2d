@@ -37,6 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 			buf = groups[0];
 		});
 		evalAllFilesInProject();
+		evalString("if love.load2 then love.load2() end");
 	}
 
 	function evalString(str: string) {
@@ -44,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	// vscode.workspace.onDidSaveTextDocument(doc => {
-	// 	// if (!proc) return;
+	// 	// if (!proc) return warnAboutNoProcess();
 
 	// 	// console.log('got save');
 	// 	// if (vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave')) {
@@ -83,17 +84,17 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	function evalStringFromUser() {
-		if (!proc) return;
+		if (!proc) return warnAboutNoProcess();
 		vscode.window.showInputBox({
 			prompt: 'Code to eval:',
 			ignoreFocusOut: true,
 		}).then(str => {
-			if (str) evalString('return ' + str);
+			if (str) evalString(str);
 		});
 	}
 
 	function evalSelectionOrFile() {
-		if (!proc) return;
+		if (!proc) return warnAboutNoProcess();
 		const editor = vscode.window.activeTextEditor;
 		if (editor && editor.document.languageId === 'lua') {
 			let str = editor.document.getText();
@@ -105,7 +106,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	function evalOpenFiles() {
-		if (!proc) return;
+		if (!proc) return warnAboutNoProcess();
 		vscode.workspace.textDocuments
 			.filter(doc => doc.languageId === 'lua')
 			.forEach(doc => {
@@ -114,12 +115,16 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	function evalAllFilesInProject() {
-		if (!proc) return;
+		if (!proc) return warnAboutNoProcess();
 		vscode.workspace.findFiles('**/*.lua').then(uris => {
 			uris.forEach((uri) => {
 				evalString(fs.readFileSync(uri.fsPath, 'utf-8'));
 			});
 		});
+	}
+
+	function warnAboutNoProcess() {
+		vscode.window.showErrorMessage("But Love2d isn't running.");
 	}
 }
 

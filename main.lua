@@ -25,7 +25,9 @@ love.thread.newThread([[
 function UpdateLive2d()
   local input = love.thread.getChannel("live2d_in"):pop()
   if input then
-    local fn, err = load(input)
+    local fn, err = load('return '..input)
+    if err then fn, err = load(input) end
+
     if fn then
       local success, ret = xpcall(fn, function(err) return err end)
       if success then
