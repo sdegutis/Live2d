@@ -10,11 +10,22 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.window.showInformationMessage('Running Love2d...');
 	const rootDir = vscode.workspace.rootPath!;
 
+	const chan = vscode.window.createOutputChannel('love2d output');
+	context.subscriptions.push(chan);
+	chan.show();
+	chan.appendLine('hey guys');
+	chan.appendLine('hows it going');
+
 	function setupProc() {
 		proc = spawn('love', [rootDir]);
 		proc.unref();
 		proc.on('exit', () => {
 			proc = null;
+		});
+
+		proc.stdout.on('data', (chunk: Buffer) => {
+			console.log('got:', chunk.toString());
+			chan.appendLine('got: ' + chunk.toString());
 		});
 	}
 	setupProc();
@@ -60,15 +71,6 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand(
 		'degutis.live2d.evalAllOpen', () => {
 			// if (!proc) return;
-
-			// vscode.window.showInputBox({ prompt: 'testing' })
-			vscode.window.createTerminal('bla')
-
-			const chan = vscode.window.createOutputChannel('love2d output');
-			context.subscriptions.push(chan);
-			chan.show();
-			chan.appendLine('hey guys');
-			chan.appendLine('hows it going');
 
 			vscode.workspace.textDocuments.filter(doc => doc.languageId === 'lua').forEach(doc => {
 				console.log('found file', doc.fileName);
