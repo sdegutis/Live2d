@@ -30,15 +30,19 @@
 		],
 		"commands": [
 			{
-				"command": "degutis.live2d.eval",
+				"command": "degutis.live2d.evalString",
+				"title": "Eval string from prompt"
+			},
+			{
+				"command": "degutis.live2d.evalSelectionOrFile",
 				"title": "Eval selection or file"
 			},
 			{
-				"command": "degutis.live2d.evalAll",
+				"command": "degutis.live2d.evalProjectFiles",
 				"title": "Eval all files in project"
 			},
 			{
-				"command": "degutis.live2d.evalAllOpen",
+				"command": "degutis.live2d.evalOpenFiles",
 				"title": "Eval all open files in project"
 			},
 			{
@@ -48,19 +52,24 @@
 		],
 		"keybindings": [
 			{
-				"command": "degutis.live2d.eval",
+				"command": "degutis.live2d.evalString",
+				"key": "Ctrl+Alt+E",
+				"mac": "Ctrl+cmd+E"
+			},
+			{
+				"command": "degutis.live2d.evalSelectionOrFile",
 				"key": "Alt+E",
 				"mac": "cmd+E"
 			},
 			{
-				"command": "degutis.live2d.evalAllOpen",
+				"command": "degutis.live2d.evalOpenFiles",
 				"key": "Alt+Shift+E",
 				"mac": "cmd+Shift+E"
 			},
 			{
 				"command": "degutis.live2d.run",
-				"key": "Alt+R",
-				"mac": "cmd+R"
+				"key": "Alt+Shift+R",
+				"mac": "cmd+Shift+R"
 			}
 		]
 	},
