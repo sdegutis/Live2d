@@ -14,7 +14,7 @@ love.thread.newThread([[
     repeat
       ret = love.thread.getChannel("live2d_out"):pop()
     until ret
-    io.write(ret..'\n')
+    io.write(ret..'\n\0')
     io.flush()
   end
 
@@ -29,12 +29,12 @@ function UpdateLive2d()
     if fn then
       local success, ret = xpcall(fn, function(err) return err end)
       if success then
-        love.thread.getChannel("live2d_out"):push(tostring(ret))
+        love.thread.getChannel("live2d_out"):push('0'..tostring(ret))
       else
-        love.thread.getChannel("live2d_out"):push('Runtime error:'..tostring(ret))
+        love.thread.getChannel("live2d_out"):push('1'..'Runtime error: '..tostring(ret))
       end
     else
-      love.thread.getChannel("live2d_out"):push('Syntax error: '..err)
+      love.thread.getChannel("live2d_out"):push('1'..'Syntax error: '..err)
     end
   end
 end

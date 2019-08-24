@@ -6,7 +6,6 @@ let proc: ChildProcess | null;
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Starting Live2d');
-	// vscode.window.showInformationMessage('Starting Live2d');
 
 	const chan = vscode.window.createOutputChannel('love2d output');
 	context.subscriptions.push(chan);
@@ -15,12 +14,27 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function runLove2d() {
 		if (proc) return;
-		chan.appendLine('Running Love2d');
+		vscode.window.showInformationMessage('Starting Love2d');
+		chan.appendLine('Starting Love2d');
 		proc = spawn('love', [context.extensionPath]);
 		proc.unref();
 		proc.on('exit', () => { proc = null });
+		let buf = ''
 		proc.stdout.on('data', (chunk: Buffer) => {
-			chan.append(chunk.toString());
+			buf += chunk.toString();
+			const groups = buf.split('\0');
+			while (groups.length > 1) {
+				let str = groups.shift()!;
+				const isErr = str.charAt(0) === '1';
+				str = str.slice(1);
+				if (isErr) {
+					vscode.window.showErrorMessage(str);
+				}
+				else {
+					chan.append(str);
+				}
+			}
+			buf = groups[0];
 		});
 		evalAllFilesInProject();
 	}
