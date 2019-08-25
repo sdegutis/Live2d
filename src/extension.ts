@@ -7,7 +7,7 @@ let proc: ChildProcess | null;
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Starting Live2d');
 
-	const chan = vscode.window.createOutputChannel('love2d output');
+	const chan = vscode.window.createOutputChannel('Live2d');
 	context.subscriptions.push(chan);
 	chan.show();
 	chan.appendLine('Starting Live2d');
