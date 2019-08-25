@@ -38,21 +38,19 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			buf = groups[0];
 		});
-		// evalAllFilesInProject();
+		evalAllFilesInProject();
 	}
 
-	function evalString(str: string) {
+	function evalStringInLua(str: string) {
 		proc!.stdin.write(str + '\0');
 	}
 
-	// vscode.workspace.onDidSaveTextDocument(doc => {
-	// 	// if (!proc) return warnAboutNoProcess();
-
-	// 	// console.log('got save');
-	// 	// if (vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave')) {
-	// 	// 	evalSelectionOrFile();
-	// 	// }
-	// });
+	vscode.workspace.onDidSaveTextDocument(doc => {
+		if (!proc) return;
+		if (vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave')) {
+			evalStringInLua(doc.getText());
+		}
+	});
 
 	context.subscriptions.push(vscode.commands.registerCommand(
 		'degutis.live2d.evalSelectionOrFile', () => {
@@ -90,7 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
 			prompt: 'Code to eval:',
 			ignoreFocusOut: true,
 		}).then(str => {
-			if (str) evalString(str);
+			if (str) evalStringInLua(str);
 		});
 	}
 
@@ -98,11 +96,14 @@ export function activate(context: vscode.ExtensionContext) {
 		if (!proc) return warnAboutNoProcess();
 		const editor = vscode.window.activeTextEditor;
 		if (editor && editor.document.languageId === 'lua') {
-			let str = editor.document.getText();
-			if (!editor.selection.isEmpty) {
-				str = editor.document.getText(editor.selection);
+			if (editor.selections.length === 1 && editor.selection.isEmpty) {
+				evalStringInLua(editor.document.getText());
 			}
-			evalString(str);
+			else {
+				editor.selections.forEach(sel => {
+					evalStringInLua(editor.document.getText(sel));
+				});
+			}
 		}
 	}
 
@@ -111,7 +112,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.workspace.textDocuments
 			.filter(doc => doc.languageId === 'lua')
 			.forEach(doc => {
-				evalString(doc.getText());
+				evalStringInLua(doc.getText());
 			});
 	}
 
@@ -119,7 +120,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (!proc) return warnAboutNoProcess();
 		vscode.workspace.findFiles('**/*.lua').then(uris => {
 			uris.forEach((uri) => {
-				evalString(fs.readFileSync(uri.fsPath, 'utf-8'));
+				evalStringInLua(fs.readFileSync(uri.fsPath, 'utf-8'));
 			});
 		});
 	}
