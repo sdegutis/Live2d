@@ -47,6 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.workspace.onDidSaveTextDocument(doc => {
 		if (!proc) return;
+		console.log(vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave'), JSON.stringify(doc.getText()));
 		if (vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave')) {
 			evalStringInLua(doc.getText());
 		}
