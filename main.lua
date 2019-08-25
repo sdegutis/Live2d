@@ -63,6 +63,7 @@ end
 setmetatable(love, {
   __index = function(t,k)
     if k == 'update' then
+      if not __live2d_ready then return nil end
       return fakeupdate
     else
       return rawget(t,k)
@@ -76,3 +77,8 @@ setmetatable(love, {
     end
   end
 })
+
+
+-- load the real main.lua
+local fn = loadfile(love.filesystem.getWorkingDirectory()..'/main.lua')
+fn()

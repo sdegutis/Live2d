@@ -16,7 +16,9 @@ export function activate(context: vscode.ExtensionContext) {
 		if (proc) return;
 		vscode.window.showInformationMessage('Starting Love2d');
 		chan.appendLine('Starting Love2d');
-		proc = spawn('love', [context.extensionPath]);
+		proc = spawn('love', [context.extensionPath], {
+			cwd: vscode.workspace.workspaceFolders![0].uri.fsPath,
+		});
 		proc.unref();
 		proc.on('exit', () => { proc = null });
 		let buf = ''
@@ -36,8 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			buf = groups[0];
 		});
-		evalAllFilesInProject();
-		evalString("if love.load2 then love.load2() end");
+		// evalAllFilesInProject();
 	}
 
 	function evalString(str: string) {
