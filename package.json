@@ -38,7 +38,7 @@
 				"title": "Eval selection or file"
 			},
 			{
-				"command": "degutis.live2d.evalProjectFiles",
+				"command": "degutis.live2d.evalAllFiles",
 				"title": "Eval all files in project"
 			},
 			{
@@ -46,7 +46,7 @@
 				"title": "Eval all open files in project"
 			},
 			{
-				"command": "degutis.live2d.run",
+				"command": "degutis.live2d.runLove2d",
 				"title": "Run Love2d for project"
 			}
 		],
@@ -67,7 +67,7 @@
 				"mac": "cmd+Shift+E"
 			},
 			{
-				"command": "degutis.live2d.run",
+				"command": "degutis.live2d.runLove2d",
 				"key": "Alt+Shift+R",
 				"mac": "cmd+Shift+R"
 			}

@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			buf = groups[0];
 		});
-		evalAllFilesInProject();
+		evalAllFiles();
 	}
 
 	function evalStringInLua(str: string) {
@@ -52,35 +52,11 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	context.subscriptions.push(vscode.commands.registerCommand(
-		'degutis.live2d.evalSelectionOrFile', () => {
-			evalSelectionOrFile();
-		})
-	);
-
-	context.subscriptions.push(vscode.commands.registerCommand(
-		'degutis.live2d.evalPromptedString', () => {
-			evalPromptedString();
-		})
-	);
-
-	context.subscriptions.push(vscode.commands.registerCommand(
-		'degutis.live2d.evalProjectFiles', () => {
-			evalAllFilesInProject();
-		})
-	);
-
-	context.subscriptions.push(vscode.commands.registerCommand(
-		'degutis.live2d.evalOpenFiles', () => {
-			evalOpenFiles();
-		})
-	);
-
-	context.subscriptions.push(vscode.commands.registerCommand(
-		'degutis.live2d.run', () => {
-			runLove2d();
-		})
-	);
+	context.subscriptions.push(vscode.commands.registerCommand('degutis.live2d.evalSelectionOrFile', evalSelectionOrFile));
+	context.subscriptions.push(vscode.commands.registerCommand('degutis.live2d.evalPromptedString', evalPromptedString));
+	context.subscriptions.push(vscode.commands.registerCommand('degutis.live2d.evalAllFiles', evalAllFiles));
+	context.subscriptions.push(vscode.commands.registerCommand('degutis.live2d.evalOpenFiles', evalOpenFiles));
+	context.subscriptions.push(vscode.commands.registerCommand('degutis.live2d.runLove2d', runLove2d));
 
 	function evalPromptedString() {
 		if (!proc) return warnAboutNoProcess();
@@ -116,7 +92,7 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 	}
 
-	function evalAllFilesInProject() {
+	function evalAllFiles() {
 		if (!proc) return warnAboutNoProcess();
 		vscode.workspace.findFiles('**/*.lua').then(uris => {
 			uris.forEach((uri) => {
