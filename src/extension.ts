@@ -61,8 +61,8 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(vscode.commands.registerCommand(
-		'degutis.live2d.evalString', () => {
-			evalStringFromUser();
+		'degutis.live2d.evalPromptedString', () => {
+			evalPromptedString();
 		})
 	);
 
@@ -84,7 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 	);
 
-	function evalStringFromUser() {
+	function evalPromptedString() {
 		if (!proc) return warnAboutNoProcess();
 		vscode.window.showInputBox({
 			prompt: 'Code to eval:',

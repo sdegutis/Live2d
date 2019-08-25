@@ -30,7 +30,7 @@
 		],
 		"commands": [
 			{
-				"command": "degutis.live2d.evalString",
+				"command": "degutis.live2d.evalPromptedString",
 				"title": "Eval string from prompt"
 			},
 			{
@@ -52,7 +52,7 @@
 		],
 		"keybindings": [
 			{
-				"command": "degutis.live2d.evalString",
+				"command": "degutis.live2d.evalPromptedString",
 				"key": "Ctrl+Alt+E",
 				"mac": "Ctrl+cmd+E"
 			},
