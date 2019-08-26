@@ -3,7 +3,7 @@
 	"displayName": "Live2d",
 	"publisher": "degutis",
 	"description": "Live Love2d development environment",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"engines": {
 		"vscode": "^1.31.0"
 	},

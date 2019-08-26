@@ -5,12 +5,52 @@ import * as fs from 'fs';
 let proc: ChildProcess | null;
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Starting Live2d');
+	console.log('Welcome to Live2d');
 
 	const chan = vscode.window.createOutputChannel('Live2d');
 	context.subscriptions.push(chan);
 	chan.show();
-	chan.appendLine('Starting Live2d');
+	chan.appendLine('Welcome to Live2d');
+
+	// const item = new vscode.CompletionItem('love.graphics2.print3');
+	// item.detail = 'how are you';
+	// item.documentation = 'this is the docstring';
+	// item.kind = vscode.CompletionItemKind.Function;
+
+	// vscode.languages.registerCompletionItemProvider('lua', {
+	// 	provideCompletionItems(document, position, token, context) {
+	// 		return [
+	// 			item,
+	// 		];
+	// 		return [];
+	// 	}
+	// });
+
+	// vscode.languages.registerDocumentFormattingEditProvider('lua', {
+	// 	provideDocumentFormattingEdits(document, options, token) {
+	// 		const out = [];
+	// 		let starts: vscode.Position | undefined;
+	// 		const str = document.getText();
+	// 		for (let i = 0; i < str.length; i++) {
+	// 			const c = str.charAt(i);
+	// 			if (c === ' ') {
+	// 				if (!starts) {
+	// 					starts = document.positionAt(i);
+	// 				}
+	// 			}
+	// 			else {
+	// 				if (starts) {
+	// 					if (document.offsetAt(starts) + 2 < i) {
+	// 						const ends = document.positionAt(i - 1);
+	// 						out.push(vscode.TextEdit.delete(new vscode.Range(starts, ends)));
+	// 					}
+	// 					starts = undefined;
+	// 				}
+	// 			}
+	// 		}
+	// 		return out;
+	// 	}
+	// });
 
 	function runLove2d() {
 		if (proc) return;
@@ -33,7 +73,7 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showErrorMessage(str);
 				}
 				else {
-					chan.append(str);
+					chan.append(`[${new Date().toISOString().slice(11, -1)}] ${str}`);
 				}
 			}
 			buf = groups[0];
@@ -47,7 +87,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.workspace.onDidSaveTextDocument(doc => {
 		if (!proc) return;
-		console.log(vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave'), JSON.stringify(doc.getText()));
 		if (vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave')) {
 			evalStringInLua(doc.getText());
 		}
