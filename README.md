@@ -35,6 +35,12 @@ Now these keyboard shortcuts are enabled:
 - <kbd>Ctrl+Shift+E</kbd> - Eval current line
 - <kbd>Ctrl+Cmd+E</kbd> - Eval prompted string
 
+## Magic Tables
+
+The magic tables is optional but it's super helpful in this context. Imagine you wrote a file that defines a new table, adds stuff to it, and uses it. (This is especially common when using tables as namespaces.) Once you use Live2d to re-eval that file, it's going to redefine that variable with a new table, and the old table will be inaccessible, with all its state!
+
+Magic tables are just tables where any time you access a non-existing key that starts with an uppercase letter, it adds a magic table to that key and returns it. Which means this is recursive. The require statement above turns the global table into a magic table, so you can start accessing non-existing capitalized global variables, and they'll just come into existence!
+
 ## Extension Settings
 
 There's an opt-in setting for "eval file on save" but its utility is questionable.
