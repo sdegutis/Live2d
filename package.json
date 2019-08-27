@@ -23,7 +23,7 @@
 					"degutis.live2d.evalOnSave": {
 						"description": "Eval file or selection when file is saved",
 						"type": "boolean",
-						"default": true
+						"default": false
 					}
 				}
 			}

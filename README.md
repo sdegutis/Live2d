@@ -1,34 +1,30 @@
 # Live2d
 
-Live development environment for Love2d
+Live development environment for Love2d.
 
-## Suggestions
+## Usage / Features
 
-Also try this:
+Add this to your Love2d's main.lua file as early as possible:
 
 ```lua
 require('live2d')
 require('live2d.magictables') -- optional but useful
 ```
 
-## Features
+Now these keyboard shortcuts are enabled:
 
-Evaluate code live in Love2d
-
-## Requirements
-
-None.
+- <kbd>Alt+Shift+R</kbd> - Run Love2d
+- <kbd>Alt+E</kbd> - Eval selection (whole file if no selection)
+- <kbd>Alt+Shift+E</kbd> - Eval open files
+- <kbd>Ctrl+Shift+E</kbd> - Eval current line
+- <kbd>Ctrl+Alt+E</kbd> - Eval prompted string
 
 ## Extension Settings
 
-None.
-
-## Known Issues
-
-None.
+There's an opt-in setting for "eval file on save" but its utility is questionable.
 
 ## Release Notes
 
-### 1.0.0
+### 0.0.9
 
-First
+- Initial release
