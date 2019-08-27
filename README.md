@@ -2,6 +2,12 @@
 
 Live development environment for Love2d.
 
+## Installation
+
+1. Make sure Love2d is in $PATH (try `brew cask install love`)
+2. Download the VSIX package file from the Releases tab
+3. Install it in VS Code from the Extensions side-tab's "..." button
+
 ## Usage / Features
 
 Add this to your Love2d's main.lua file as early as possible:
@@ -32,6 +38,13 @@ Now these keyboard shortcuts are enabled:
 ## Extension Settings
 
 There's an opt-in setting for "eval file on save" but its utility is questionable.
+
+## Building VSIX from source
+
+```bash
+$ npm install
+$ npx vsce package
+```
 
 ## Release Notes
 
