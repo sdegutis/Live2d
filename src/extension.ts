@@ -56,11 +56,18 @@ export function activate(context: vscode.ExtensionContext) {
 		if (proc) return;
 		vscode.window.showInformationMessage('Starting Love2d');
 		chan.appendLine('Starting Love2d');
-		proc = spawn('love', [context.extensionPath], {
-			cwd: vscode.workspace.workspaceFolders![0].uri.fsPath,
+		chan.appendLine(vscode.workspace.workspaceFolders![0].uri.fsPath);
+		proc = spawn('love', [vscode.workspace.workspaceFolders![0].uri.fsPath], {
+			env: {
+				...process.env,
+				LUA_PATH: context.extensionPath + '.\\?.lua;;'
+			},
 		});
 		proc.unref();
-		proc.on('exit', () => { proc = null });
+		proc.on('exit', () => {
+			chan.appendLine('Love2d exited.');
+			proc = null;
+		});
 		let buf = ''
 		proc.stdout.on('data', (chunk: Buffer) => {
 			buf += chunk.toString();

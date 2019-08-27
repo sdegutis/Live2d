@@ -1,4 +1,4 @@
--- background stdin/stdout thread
+-- background stdin thread
 love.thread.newThread([[
 
   while true do
@@ -9,7 +9,15 @@ love.thread.newThread([[
       str = str .. c
     end
     love.thread.getChannel("live2d_in"):push(str)
+  end
 
+]]):start()
+
+
+-- background stdout thread
+love.thread.newThread([[
+
+  while true do
     local ret
     repeat
       ret = love.thread.getChannel("live2d_out"):pop()
@@ -42,6 +50,12 @@ function UpdateLive2d()
 end
 
 
+-- custom error handling
+function love.errhand(err)
+  love.thread.getChannel("live2d_out"):push('1'..'Runtime error: '..tostring(err))
+end
+
+
 -- hijack love.update
 local loveupdate
 local function fakeupdate(...)
@@ -65,8 +79,3 @@ setmetatable(love, {
     end
   end
 })
-
-
--- load the real main.lua
-local fn = loadfile(love.filesystem.getWorkingDirectory()..'/main.lua')
-fn()
