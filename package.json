@@ -94,11 +94,10 @@
 		"@types/vscode": "^1.31.0",
 		"glob": "^7.1.4",
 		"mocha": "^6.1.4",
-		"typescript": "^3.3.1",
 		"tslint": "^5.12.1",
+		"typescript": "^3.3.1",
+		"vsce": "^1.66.0",
 		"vscode-test": "^1.0.2"
 	},
-	"dependencies": {
-		"vsce": "file:../../../../Program Files/nodejs/node_modules/vsce"
-	}
+	"dependencies": {}
 }
