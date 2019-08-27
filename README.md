@@ -13,7 +13,7 @@ require('live2d.magictables') -- optional but useful
 
 Now these keyboard shortcuts are enabled:
 
-(Mac)
+(Windows)
 
 - <kbd>Alt+Shift+R</kbd> - Run Love2d
 - <kbd>Alt+E</kbd> - Eval selection (whole file if no selection)
@@ -21,7 +21,7 @@ Now these keyboard shortcuts are enabled:
 - <kbd>Ctrl+Shift+E</kbd> - Eval current line
 - <kbd>Ctrl+Alt+E</kbd> - Eval prompted string
 
-(Windows)
+(Mac)
 
 - <kbd>Cmd+Shift+R</kbd> - Run Love2d
 - <kbd>Cmd+E</kbd> - Eval selection (whole file if no selection)
