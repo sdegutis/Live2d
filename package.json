@@ -38,6 +38,10 @@
 				"title": "Eval selection or file"
 			},
 			{
+				"command": "degutis.live2d.evalCurrentLine",
+				"title": "Eval current line"
+			},
+			{
 				"command": "degutis.live2d.evalAllFiles",
 				"title": "Eval all files in project"
 			},
@@ -54,22 +58,27 @@
 			{
 				"command": "degutis.live2d.evalPromptedString",
 				"key": "Ctrl+Alt+E",
-				"mac": "Ctrl+cmd+E"
+				"mac": "Ctrl+opt+E"
 			},
 			{
 				"command": "degutis.live2d.evalSelectionOrFile",
 				"key": "Alt+E",
-				"mac": "cmd+E"
+				"mac": "opt+E"
 			},
 			{
 				"command": "degutis.live2d.evalOpenFiles",
 				"key": "Alt+Shift+E",
+				"mac": "opt+Shift+E"
+			},
+			{
+				"command": "degutis.live2d.evalCurrentLine",
+				"key": "Ctrl+Shift+E",
 				"mac": "cmd+Shift+E"
 			},
 			{
 				"command": "degutis.live2d.runLove2d",
 				"key": "Alt+Shift+R",
-				"mac": "cmd+Shift+R"
+				"mac": "opt+Shift+R"
 			}
 		]
 	},

@@ -94,12 +94,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.workspace.onDidSaveTextDocument(doc => {
 		if (!proc) return;
+		if (doc.languageId !== 'lua') return;
 		if (vscode.workspace.getConfiguration().get('degutis.live2d.evalOnSave')) {
 			evalStringInLua(doc.getText());
 		}
 	});
 
 	context.subscriptions.push(vscode.commands.registerCommand('degutis.live2d.evalSelectionOrFile', evalSelectionOrFile));
+	context.subscriptions.push(vscode.commands.registerCommand('degutis.live2d.evalCurrentLine', evalCurrentLine));
 	context.subscriptions.push(vscode.commands.registerCommand('degutis.live2d.evalPromptedString', evalPromptedString));
 	context.subscriptions.push(vscode.commands.registerCommand('degutis.live2d.evalAllFiles', evalAllFiles));
 	context.subscriptions.push(vscode.commands.registerCommand('degutis.live2d.evalOpenFiles', evalOpenFiles));
@@ -115,18 +117,29 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}
 
+	function evalCurrentLine() {
+		if (!proc) return warnAboutNoProcess();
+
+		const editor = vscode.window.activeTextEditor;
+		if (!editor || editor.document.languageId !== 'lua') return;
+
+		const line = editor.document.lineAt(editor.selection.start.line);
+		evalStringInLua(line.text);
+	}
+
 	function evalSelectionOrFile() {
 		if (!proc) return warnAboutNoProcess();
+
 		const editor = vscode.window.activeTextEditor;
-		if (editor && editor.document.languageId === 'lua') {
-			if (editor.selections.length === 1 && editor.selection.isEmpty) {
-				evalStringInLua(editor.document.getText());
-			}
-			else {
-				editor.selections.forEach(sel => {
-					evalStringInLua(editor.document.getText(sel));
-				});
-			}
+		if (!editor || editor.document.languageId !== 'lua') return;
+
+		if (editor.selections.length === 1 && editor.selection.isEmpty) {
+			evalStringInLua(editor.document.getText());
+		}
+		else {
+			editor.selections.forEach(sel => {
+				evalStringInLua(editor.document.getText(sel));
+			});
 		}
 	}
 
