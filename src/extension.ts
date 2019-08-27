@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { spawn, ChildProcess } from 'child_process';
 import * as fs from 'fs';
+import { sep } from 'path';
 
 let proc: ChildProcess | null;
 
@@ -60,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 		proc = spawn('love', [vscode.workspace.workspaceFolders![0].uri.fsPath], {
 			env: {
 				...process.env,
-				LUA_PATH: context.extensionPath + '.\\?.lua;;'
+				LUA_PATH: context.extensionPath + sep + '?.lua;;'
 			},
 		});
 		proc.unref();
