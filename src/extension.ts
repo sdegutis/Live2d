@@ -74,14 +74,14 @@ export function activate(context: vscode.ExtensionContext) {
 			const groups = buf.split('\0');
 			while (groups.length > 1) {
 				let str = groups.shift()!;
-				const isErr = str.charAt(0) === '1';
-				str = str.slice(1);
-				if (isErr) {
+				const ch = str.charAt(0);
+				if (ch === '\u0001') {
+					// error, otherwise stdout or result
+					str = str.slice(1);
 					vscode.window.showErrorMessage(str);
 				}
-				else {
-					chan.append(`[${new Date().toISOString().slice(11, -1)}] ${str}`);
-				}
+
+				chan.append(`[${new Date().toISOString().slice(11, -1)}] ${str}`);
 			}
 			buf = groups[0];
 		});

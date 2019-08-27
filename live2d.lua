@@ -29,6 +29,13 @@ love.thread.newThread([[
 ]]):start()
 
 
+-- hijack print
+local oldprint = print
+function print(...)
+  oldprint(... .. '\n\0')
+end
+
+
 -- run input and reply with result/error
 function UpdateLive2d()
   local input = love.thread.getChannel("live2d_in"):pop()
@@ -39,12 +46,12 @@ function UpdateLive2d()
     if fn then
       local success, ret = xpcall(fn, function(err) return err end)
       if success then
-        love.thread.getChannel("live2d_out"):push('0'..tostring(ret))
+        love.thread.getChannel("live2d_out"):push(tostring(ret))
       else
-        love.thread.getChannel("live2d_out"):push('1'..'Runtime error: '..tostring(ret))
+        love.thread.getChannel("live2d_out"):push('\1'..'Runtime error: '..tostring(ret))
       end
     else
-      love.thread.getChannel("live2d_out"):push('1'..'Syntax error: '..err)
+      love.thread.getChannel("live2d_out"):push('\1'..'Syntax error: '..err)
     end
   end
 end
@@ -52,7 +59,7 @@ end
 
 -- custom error handling
 function love.errhand(err)
-  love.thread.getChannel("live2d_out"):push('1'..'Runtime error: '..tostring(err))
+  love.thread.getChannel("live2d_out"):push('\1'..'Runtime error: '..tostring(err))
 end
 
 
